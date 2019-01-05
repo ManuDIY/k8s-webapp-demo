@@ -11,9 +11,17 @@ import (
     "log"
 )
 
+func getEnv(key, fallback string) string {
+    if value, ok := os.LookupEnv(key); ok {
+        return value
+    }
+    return fallback
+}
+
+
 func demoDefault(w http.ResponseWriter, r *http.Request) {
         var podIp string
-        nodeName := os.Getenv("KUBERNETES_SERVICE_HOST")
+	nodeName := getEnv("MY_NODE_NAME","NO_ENV")
         podName,_ := os.Hostname()
         addrs, _ := net.LookupIP(podName)
         for _, addr := range addrs {
@@ -713,7 +721,7 @@ TINKG38bfxt/f+Z/RP8/0ca0age3/AgAAAAASUVORK5CYII=
 
 func main() {
     http.HandleFunc("/", demoDefault)
-    err := http.ListenAndServe(":9090", nil)
+    err := http.ListenAndServe(":8080", nil)
     if err != nil {
         log.Fatal("ListenAndServe: ", err)
     }

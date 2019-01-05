@@ -12,9 +12,16 @@ import (
     "log"
 )
 
+func getEnv(key, fallback string) string {
+    if value, ok := os.LookupEnv(key); ok {
+        return value
+    }
+    return fallback
+}
+
 func demoDefault(w http.ResponseWriter, r *http.Request) {
         var podIp string
-        nodeName := os.Getenv("KUBERNETES_SERVICE_HOST")
+        nodeName := getEnv("MY_NODE_NAME","NO_ENV")
         podName,_ := os.Hostname()
         addrs, _ := net.LookupIP(podName)
         for _, addr := range addrs {
@@ -24,7 +31,7 @@ func demoDefault(w http.ResponseWriter, r *http.Request) {
         }
 
         data := `<html><head></head><title></title><body><div> <h2>Serving Tea from</h2>`
-        data = data + `<h3>Pod:` + podName + `</h3><h3>IP:` + podIp +  `</h3><h3>Node:` + nodeName + `</h3>`
+        data = data + `<h3>Pod:` + podName + `</h3><h3>Pod IP:` + podIp +  `</h3><h3>Node:` + nodeName + `</h3>`
         fmt.Fprintf(w, data + `<img src="data:image/png;base64,
 iVBORw0KGgoAAAANSUhEUgAAAPIAAADACAYAAAA+2j4CAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
 jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAOsrSURBVHhe7L11dFzX2f3/W9++byGFJG2YmeMk
@@ -1085,7 +1092,7 @@ cB6/xJxJZLhJE/QsLLKOalMrZeQFe5qdjZvV2ZjFY2NWj41ZPn/LPhX8P9h2F7+T/35+XrlVz7+a
 FS5XEKsKlsPdCGyb4a5aFRZbPbBsn+3/O4zP1/m9eudmYG3fBa5hteXXLIcXM7y+1li9svgpW6NH
 B5APPw4/Dj8OzcdhkA8/Dj9+Ao/DIB9+HH78BB6HQT78OPw45B8p/X89e4m5yt1BzQAAAABJRU5E
 rkJggg==
-" alt="Tea" /></div></body></html>`)
+" alt="Coffee" /></div></body></html>`)
 }
 
 
