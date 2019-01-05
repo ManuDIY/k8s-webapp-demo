@@ -2,3 +2,4 @@
 ## Docker hub images
    - ansilh/demo-coffee
    - ansilh/demo-tea
+   - ansilh/debug-tools
